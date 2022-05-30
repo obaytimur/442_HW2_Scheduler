@@ -6,13 +6,15 @@
 #include "stdlib.h"
 #include "unistd.h"
 #include "stdio.h"
+#include "signal.h"
+#include <stdbool.h>
 
 #ifndef HW2_THREADINFO_H
 #define HW2_THREADINFO_H
 
 struct ThreadInfo {
     ucontext_t context;
-    int state;
+    int state ;
     int threadNumber;
     int countNumber;
     int exeNumber;

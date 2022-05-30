@@ -49,8 +49,8 @@ cmake_ninja_workdir = /home/ogi/Media/ODTÜ$ EE/4-2/442/HW2/cmake-build-debug/
 
 build cmake_object_order_depends_target_HW2: phony || CMakeFiles/HW2.dir
 
-build CMakeFiles/HW2.dir/main.c.o: C_COMPILER__HW2_Debug /home/ogi/Media/ODTÜ$ EE/4-2/442/HW2/main.c || cmake_object_order_depends_target_HW2
-  DEP_FILE = CMakeFiles/HW2.dir/main.c.o.d
+build CMakeFiles/HW2.dir/scheduler_one.c.o: C_COMPILER__HW2_Debug /home/ogi/Media/ODTÜ$ EE/4-2/442/HW2/scheduler_one.c || cmake_object_order_depends_target_HW2
+  DEP_FILE = CMakeFiles/HW2.dir/scheduler_one.c.o.d
   FLAGS = -g -std=gnu99
   OBJECT_DIR = CMakeFiles/HW2.dir
   OBJECT_FILE_DIR = CMakeFiles/HW2.dir
@@ -75,7 +75,7 @@ build CMakeFiles/HW2.dir/ThreadInfo.c.o: C_COMPILER__HW2_Debug /home/ogi/Media/O
 #############################################
 # Link the executable HW2
 
-build HW2: C_EXECUTABLE_LINKER__HW2_Debug CMakeFiles/HW2.dir/main.c.o CMakeFiles/HW2.dir/functs.c.o CMakeFiles/HW2.dir/ThreadInfo.c.o
+build HW2: C_EXECUTABLE_LINKER__HW2_Debug CMakeFiles/HW2.dir/scheduler_one.c.o CMakeFiles/HW2.dir/functs.c.o CMakeFiles/HW2.dir/ThreadInfo.c.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/HW2.dir
   POST_BUILD = :

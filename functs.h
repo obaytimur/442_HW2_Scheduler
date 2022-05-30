@@ -10,9 +10,10 @@ struct functs {
 
 };
 
-void initializeThread(struct ThreadInfo* threadArray, int exeNumber, int threadIndex, int stackSize);
-int createThread(struct ThreadInfo* threadArray);
-void runThread(struct ThreadInfo* threadArray, int threadIndex);
-void exitThread(struct ThreadInfo* threadArray, int threadIndex);
+void initializeThread(struct ThreadInfo *threadArray[], int exeNumber, int threadIndex, int stackSize);
+int createThread(struct ThreadInfo *threadArray[]);
+void runThread(struct ThreadInfo *threadArray[], int threadIndex);
+void exitThread(struct ThreadInfo *threadArray[], int threadIndex);
+bool isAllFinished(struct ThreadInfo *threadArray[]);
 
 #endif //HW2_FUNCTS_H
