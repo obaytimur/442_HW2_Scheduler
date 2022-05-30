@@ -1,0 +1,4 @@
+/snap/clion/190/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/snap/clion/190/bin/ninja/linux/ninja -G Ninja -S "/home/ogi/Media/ODTÜ EE/4-2/442/HW2" -B "/home/ogi/Media/ODTÜ EE/4-2/442/HW2/cmake-build-debug"
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/ogi/Media/ODTÜ EE/4-2/442/HW2/cmake-build-debug

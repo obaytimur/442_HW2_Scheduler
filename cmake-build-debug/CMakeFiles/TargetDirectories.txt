@@ -1,0 +1,3 @@
+/home/ogi/Media/ODTÜ EE/4-2/442/HW2/cmake-build-debug/CMakeFiles/HW2.dir
+/home/ogi/Media/ODTÜ EE/4-2/442/HW2/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/ogi/Media/ODTÜ EE/4-2/442/HW2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
