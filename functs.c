@@ -1,6 +1,8 @@
 //
 // Created by ogi on 30.05.2022.
 //
+
+/*
 #include "functs.h"
 
 void initializeThread(struct ThreadInfo *threadArray[], int exeNumber, int threadIndex, int stackSize){
@@ -67,3 +69,4 @@ bool isAllFinished(struct ThreadInfo *threadArray[]){
     }
     return true;
 }
+ */

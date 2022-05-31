@@ -8,6 +8,7 @@
 #include "stdio.h"
 #include "signal.h"
 #include <stdbool.h>
+#include<time.h>
 
 #ifndef HW2_THREADINFO_H
 #define HW2_THREADINFO_H

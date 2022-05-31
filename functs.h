@@ -1,6 +1,7 @@
 //
 // Created by ogi on 30.05.2022.
 //
+/*
 #include "ThreadInfo.h"
 
 #ifndef HW2_FUNCTS_H
@@ -17,3 +18,4 @@ void exitThread(struct ThreadInfo *threadArray[], int threadIndex);
 bool isAllFinished(struct ThreadInfo *threadArray[]);
 
 #endif //HW2_FUNCTS_H
+ */
