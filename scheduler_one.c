@@ -1,6 +1,4 @@
 #include "ThreadInfo.h"
-
-
 //#define finished -1
 //#define ready 0
 //#define running 1
@@ -34,7 +32,6 @@ void runThread(int threadIndex){
 
     if(threadArray[threadIndex].countNumber >= threadArray[threadIndex].exeNumber){
         exitThread(threadIndex);
-        //swapcontext(&threadArray[threadIndex].context,&threadArray[0].context );
     }
     sleep(1);
 }
@@ -58,20 +55,6 @@ int createThread(int threadIndex){
     if(returnObject == -1) {
         printf("Could not create thread object");
     }
-    /*
-    int availableIndex = 0;
-    for(int i=5;i>0; i--){
-        if(threadArray[i].state == 2 || threadArray[i].state == -1){
-            availableIndex = i;
-        }
-    }
-    if(availableIndex != 0){
-        return availableIndex;
-    }
-    else{
-        printf("A new thread could not be created\n");
-        return -1;
-        */
 }
 
 bool isAllFinished(){
@@ -87,7 +70,6 @@ void handler() {
     swapcontext(&threadArray[runningThreadIndex].context, &threadArray[0].context);
 }
 void scheduler_one(int initial){
-    //printf("schedulera girdi");
     bool isFound = false;
     int randomNumber;
     while (!isFound) {
@@ -138,9 +120,8 @@ int main(int argc, char **argv){
 
     while(!isFinished){
         scheduler_one(0);
-        //  printf("scheduler sonrası deneme: %d \n", sayma);
          sayma += 1;
         isFinished = isAllFinished();
     }
-    printf("All threads are finished!");
+    printf("All threads are finished! \n");
 }
