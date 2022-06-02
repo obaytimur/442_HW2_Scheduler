@@ -3,4 +3,4 @@ project(HW2 C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(HW2 scheduler_one.c functs.c ThreadInfo.h)
+add_executable(HW2 main.c ThreadInfo.h input.txt)
