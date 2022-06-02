@@ -1,5 +1,5 @@
 //
-// Created by ogi on 30.05.2022.
+// Created by ogi on 26.05.2022.
 //
 
 /* Initial version of functions
@@ -211,7 +211,7 @@ int main(int argc, char **argv){
     signal(SIGALRM, handler);
 
     while(!isFinished){
-        scheduler_one(0);
+        scheduler_lottery(0);
         //  printf("scheduler sonrası deneme: %d \n", sayma);
         sayma += 1;
         isFinished = isAllFinished();
