@@ -62,8 +62,8 @@ void runThread(int threadIndex){    // Function that runs the threads
         }
         // Prints the counter value of the thread
         printf("%d \n", threadArray[threadIndex].countNumber);
-        sleep(1); // Thread sleeps for one second to represent the operation time
     }
+    sleep(1); // Thread sleeps for one second to represent the operation time
 
     for(int i=1; i<6; i++){
         if(threadArray[i].state == 3){
@@ -172,6 +172,7 @@ void scheduler_lottery(int initial){
                 if(threadArray[i].state == 3){
                     randomNumber = i;
                     isFound = true;
+                    break;
                 }
             }
         }
@@ -186,7 +187,7 @@ void scheduler_SRTF(int initial){
     int shortestRemExeInd = 0;
     int exeValue = 999;
     for(int i=1; i<6; i++){
-        if(threadArray[i].state != -1 && threadArray[i].state != 3 && threadArray[i].cpuBurstArray[threadArray[i].exeIndex] < exeValue){
+        if(/*threadArray[i].state != -1 && threadArray[i].state != 3 */ threadArray[i].state==0 && threadArray[i].cpuBurstArray[threadArray[i].exeIndex] < exeValue){
             exeValue = threadArray[i].cpuBurstArray[threadArray[i].exeIndex];
             shortestRemExeInd = i;
         }
