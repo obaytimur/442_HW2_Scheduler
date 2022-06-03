@@ -1,11 +1,13 @@
+// Fazlı Oğulcan Baytimur
+// 2231389
+
 #include "ThreadInfo.h"
 // finished -1
 // ready 0
 // running 1
 // empty 2
 // IO 3
-// Last Exe 4
-// Last IO 5
+
 #define stackSize 16384 // Given in homework parameter
 
 struct ThreadInfo threadArray[6]; // Array of threadInfo objects initialized
@@ -16,28 +18,28 @@ bool isFinished = false;            // A bool variable to flag the end of the ex
 // Moreover, runThread must be written before initializeThread since initialization requires runThread function to use
 // in makecontext().
 
-void printTerminal(){
+void printTerminal(){       // This function writes to terminal which threads are running, ready, finished, or in IO
     printf("Running>");
     for(int i=1; i<6; i++){
-        if(threadArray[i].state == 1){
+        if(threadArray[i].state == 1){      // Writes all threads whose states are 1 since, state 1 is running defined on the top
             printf("T%d ",threadArray[i].threadNumber);
         }
     }
     printf("\t \t Ready>");
     for(int i=1; i<6; i++){
-        if(threadArray[i].state == 0){
+        if(threadArray[i].state == 0){       // Writes all threads whose states are 0 since, state 0 is ready defined on the top
             printf("T%d ",threadArray[i].threadNumber);
         }
     }
     printf("\t \t Finished>");
     for(int i=1; i<6; i++){
-        if(threadArray[i].state == -1){
+        if(threadArray[i].state == -1){     // Writes all threads whose states are -1 since, state -1 is finished defined on the top
             printf("T%d ",threadArray[i].threadNumber);
         }
     }
     printf("\t \t IO>");
     for(int i=1; i<6; i++){
-        if(threadArray[i].state == 3){
+        if(threadArray[i].state == 3){      // Writes all threads whose states are 3 since, state 3 is IO defined on the top
             printf("T%d ",threadArray[i].threadNumber);
         }
     }
@@ -46,7 +48,7 @@ void printTerminal(){
 
 void exitThread(int threadIndex) {  // Function for thread to exit
     threadArray[threadIndex].state = -1;    // Then it sets the state of the object to finished
-    //free(threadArray[threadIndex].context.uc_stack.ss_sp);
+    //
 }
 
 void runThread(int threadIndex){    // Function that runs the threads
@@ -55,7 +57,8 @@ void runThread(int threadIndex){    // Function that runs the threads
         threadArray[threadIndex].state = 1;     // Starts by setting flag to running
         threadArray[threadIndex].countNumber += 1;  // Increase counter one as one execution is done
     }
-    printTerminal();
+    printTerminal();        // this function prints states of the threads, it was needed to be written after state of
+                            // running thread is set
     if(threadArray[threadIndex].state ==1){
         for(int i=0; i<threadIndex - 1; i++){
             printf("\t");   // Prints enough tabs for the corresponding thread
@@ -64,8 +67,11 @@ void runThread(int threadIndex){    // Function that runs the threads
         printf("%d \n", threadArray[threadIndex].countNumber);
     }
     sleep(1); // Thread sleeps for one second to represent the operation time
+                      // This function has to be here, because there can be threads in the IO
+                      // state that are needed to be executed, putting this function above
+                      // if statement cause problems
 
-    for(int i=1; i<6; i++){
+    for(int i=1; i<6; i++){ // Increment every IO threads counter
         if(threadArray[i].state == 3){
             threadArray[i].ioCounter += 1;
         }
@@ -78,7 +84,7 @@ void runThread(int threadIndex){    // Function that runs the threads
         printf("%d \n", threadArray[threadIndex].countNumber);
         threadArray[threadIndex].state = 0; // At the end of the second execution, state is set to ready again since runs are done
     }
-    for(int i=1; i<6; i++){
+    for(int i=1; i<6; i++){     // Same IO counter incremention
         if(threadArray[i].state == 3){
             threadArray[i].ioCounter += 1;
         }
@@ -87,12 +93,17 @@ void runThread(int threadIndex){    // Function that runs the threads
     // was shown in the homework pdf. Therefore, even if the execution number is odd, e.g. 5, it will wait
     // for it to be the next even number, e.g. 6, then exits the thread. This if statement can also be put
     // above and made for the odd ones too.
+
+    // If thread has any IO burst to be done, it changes state to 3, and resets its counter while increasing exe index
+    // stating at which execution this thread is
     if(threadArray[threadIndex].countNumber >= threadArray[threadIndex].cpuBurstArray[threadArray[threadIndex].exeIndex]){
         threadArray[threadIndex].state = 3;
         threadArray[threadIndex].countNumber = 0;
         threadArray[threadIndex].exeIndex += 1;
     }
 
+    // This loop, checks if a IO burst is finished. If it is finished, and it was the last one, thread exits,
+    // if not reset IO counter, increment IO index, set state as 0 = running
     for(int i=1; i<6; i++){
         if(threadArray[i].ioCounter >= threadArray[i].ioBurstArray[threadArray[i].ioIndex]){
             if (threadArray[i].ioIndex == 2){
@@ -119,15 +130,15 @@ int createThread(int threadIndex){
 void initializeThread(int threadIndex, int* burstArray, int* ioArray){
 threadArray[threadIndex].state = 0;                     // Sets state flag to zero since new initializations are going to be ready
 threadArray[threadIndex].threadNumber= threadIndex;     // Thread ID is given as thread's index
-threadArray[threadIndex].countNumber = 0;               // Counter start from 0, no executions are done yet
-threadArray[threadIndex].exeIndex = 0;
-threadArray[threadIndex].ioIndex = 0;
-threadArray[threadIndex].ioCounter = 0;
+threadArray[threadIndex].countNumber = 0;               // Counter start from 0, no cpu executions are done yet
+threadArray[threadIndex].exeIndex = 0;                  // Index starts from 0, if it is 2 it is the last execution for cpu
+threadArray[threadIndex].ioIndex = 0;                   // Index starts from 0, if it is 2 it is the last execution for IO
+threadArray[threadIndex].ioCounter = 0;                 // Counter start from 0, no IO executions are done yet
 
 if(threadIndex!=0){
     threadArray[threadIndex].exeNumber = burstArray[0] + burstArray[1] + burstArray[2];         // Input given by user, set as the total execution time
-    threadArray[threadIndex].cpuBurstArray[0] = burstArray[0];
-    threadArray[threadIndex].cpuBurstArray[1] = burstArray[1];
+    threadArray[threadIndex].cpuBurstArray[0] = burstArray[0];         // CPU and IO burst are initialized for the threads
+    threadArray[threadIndex].cpuBurstArray[1] = burstArray[1];         // Except for the zeroth, 0, thread which is main thread
     threadArray[threadIndex].cpuBurstArray[2] = burstArray[2];
     threadArray[threadIndex].ioBurstArray[0] = ioArray[0];
     threadArray[threadIndex].ioBurstArray[1] = ioArray[1];
@@ -166,7 +177,8 @@ void scheduler_lottery(int initial){
             threadArray[randomNumber].countNumber < threadArray[randomNumber].cpuBurstArray[threadArray[randomNumber].exeIndex]) {  // can be used for the swapcontext().
             isFound = true;
         }
-        if(threadArray[0].state != 0 && threadArray[1].state != 0 && threadArray[2].state != 0 &&
+        // This function checks if there is no ready thread and there is a thread with IO operation, it runs the IO thread
+        if(threadArray[5].state != 0 && threadArray[1].state != 0 && threadArray[2].state != 0 &&
                 threadArray[3].state != 0 && threadArray[4].state != 0){
             for(int i=1; i<6; i++){
                 if(threadArray[i].state == 3){
@@ -176,22 +188,37 @@ void scheduler_lottery(int initial){
                 }
             }
         }
+        // If all the threads are finished print terminal for the last time
+        // then free stacks of threads and exit code
+        if (threadArray[1].state == -1 && threadArray[2].state == -1 && threadArray[3].state == -1 &&
+            threadArray[4].state == -1 && threadArray[5].state == -1){
+            printTerminal();
+            printf("All threads are finished! \n");
+            for(int i=1; i<6; i++){
+                free(threadArray[i].context.uc_stack.ss_sp);
+            }
+            exit(-1);
+        }
     }
     swapcontext(&threadArray[0].context, &threadArray[randomNumber].context);   // swapcontext calls the function which
     // is defined in initialization for the thread, this part runs the runThread
 }
-
+// It has a similar structure as lottery scheduler, but thread index calculation is for the shortest
+// remaining execution of the threads current burs, NOT THE TOTAL BURST
 void scheduler_SRTF(int initial){
     signal(SIGALRM,scheduler_SRTF);
     alarm(2);
     int shortestRemExeInd = 0;
     int exeValue = 999;
+    // look every thread who are ready, if there is a smaller execution time, return its index for swapcontext
     for(int i=1; i<6; i++){
-        if(/*threadArray[i].state != -1 && threadArray[i].state != 3 */ threadArray[i].state==0 && threadArray[i].cpuBurstArray[threadArray[i].exeIndex] < exeValue){
+        if(threadArray[i].state==0 && threadArray[i].cpuBurstArray[threadArray[i].exeIndex] < exeValue){
             exeValue = threadArray[i].cpuBurstArray[threadArray[i].exeIndex];
             shortestRemExeInd = i;
         }
     }
+    // If the index is still zero, then there were no ready state,
+    // If there is a state in IO state, return its index for IO operations
     if(shortestRemExeInd == 0){
         for(int i=1; i<6; i++){
             if(threadArray[i].state == 3){
@@ -200,7 +227,11 @@ void scheduler_SRTF(int initial){
             }
         }
     }
+    // If still the index is zero, then all threads must be finished
+    // If all the threads are finished print terminal for the last time
+    // then free stacks of threads and exit code
     if (shortestRemExeInd == 0){
+        printTerminal();
         printf("All threads are finished! \n");
         for(int i=1; i<6; i++){
             free(threadArray[i].context.uc_stack.ss_sp);
@@ -209,15 +240,12 @@ void scheduler_SRTF(int initial){
     }
     swapcontext(&threadArray[0].context, &threadArray[shortestRemExeInd].context);   // swapcontext calls the function which
     // is defined in initialization for the thread, this part runs the runThread
-    if (isAllFinished() ) {      // Then it is checked whether all the threads are done or not
-        isFinished = true;
-    }
 }
 
 int main(){      // main takes input values for the threads from the txt file
     FILE *fileObject ;
     fileObject= fopen("/home/ogi/Media/ODTÜ EE/4-2/442/HW2/input.txt","r");
-    int exeNumberArray[31];
+    int exeNumberArray[31]; // array for read file
     if(fileObject==NULL) {
         printf("ERROR: Could not open file: input.txt");
         return 1;
@@ -226,7 +254,7 @@ int main(){      // main takes input values for the threads from the txt file
     while(!feof(fileObject)) {
         for (int i = 0; i < 31; i++) {
             fscanf(fileObject, "%d", &tempObject);
-            exeNumberArray[i] = tempObject;
+            exeNumberArray[i] = tempObject; // assign eadh element to the array
         }
     }
     fclose(fileObject);
@@ -234,32 +262,31 @@ int main(){      // main takes input values for the threads from the txt file
     srand(time(NULL));      // srand function is needed for the lottery selection, if not used lottery selection
     // were following the same sequence
 
-    createThread(0);
+    createThread(0);        // Create and initialize the first, 0, Main thread
     initializeThread(0,0,0);
 
     int total = 0;
-    int cpuBurstArray[5][3];
-    int ioBurstArray[5][3];
+    int cpuBurstArray[5][3];    // Two-dimensional array for cpu bursts
+    int ioBurstArray[5][3];     // Two-dimensional array for IO bursts
     for(int i=0; i<5;i++){
         for(int j=0; j<3; j++){
-            cpuBurstArray[i][j] = exeNumberArray[3*i + j];
-            total += exeNumberArray[3*i + j];
+            cpuBurstArray[i][j] = exeNumberArray[3*i + j];  // Assign cpu bursts
+            total += exeNumberArray[3*i + j];               // Calculate total for the share print
         }
     }
     for(int i=0; i<5;i++){
-        for(int j=0; j<3; j++){
+        for(int j=0; j<3; j++){     // Same operation for IO bursts
             ioBurstArray[i][j] = exeNumberArray[3*i + j +15];
         }
     }
-    int indexNumber=0;
     for(int i=0; i<5; i++){     // threads are created and initialized by calling the functions
         createThread(i+1);
         initializeThread(i+1, cpuBurstArray[i], ioBurstArray[i]);
     }
-    if(exeNumberArray[30] == 0){
+    if(exeNumberArray[30] == 0){    // If last input in the file is zero, scheduler is lottery
         printf("Scheduler is selected as Lottery. \n");
     }
-    else if (exeNumberArray[30] == 1){
+    else if (exeNumberArray[30] == 1){      // // If last input in the file is zero, scheduler is SRTF
         printf("Scheduler is selected as SRTF. \n");
     }
     // From here to getcontext line, main trivially prints writings
