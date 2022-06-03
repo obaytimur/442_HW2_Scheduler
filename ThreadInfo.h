@@ -21,6 +21,11 @@ struct ThreadInfo {
     int threadNumber;       // Thread's ID
     int countNumber;        // Counter that counts how many executions are done on this thread
     int exeNumber;          // Execution value for thread to run given as input
+    int cpuBurstArray[3];
+    int ioBurstArray[3];
+    int exeIndex;
+    int ioIndex;
+    int ioCounter;
 };
 
 #endif //HW2_THREADINFO_H
